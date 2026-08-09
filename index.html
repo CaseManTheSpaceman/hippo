@@ -94,6 +94,11 @@
   /* How far down the hippo slides (as a share of its own height) to clear room
      for the email form. The page enlarges this automatically if the form needs
      more room, so treat it as a minimum. */
+  --hippo-bleed-left:0px;
+  --hippo-bleed-right:0px;
+  /* How far the hippo extends past the page's side margin on each side, toward
+     the screen edge. 0 keeps that side aligned with the headline; setting it to
+     --page-padding-x runs the artwork to the edge. Larger values crop it. */
   --hippo-align:flex-start;
   /* flex-start = hippo hugs the left margin. center = centred in the stage. */
 
@@ -179,6 +184,13 @@
     --button-padding-x:1rem;
     --button-font-size:14px;
     --form-nudge-up:8px;
+    --hippo-bleed-left:1.25rem;
+    --hippo-bleed-right:0px;
+    /* On mobile the hippo runs off the left edge while its nose keeps the page
+       margin on the right. */
+    --mobile-input-text-align:center;
+    /* When the button wraps below the field, the placeholder and typed text are
+       centred to match the button. Set to "left" to return to a normal field. */
     --purple-hippo-count:5;
     /* Fewer accents on a phone, where the grid is only a few columns wide. */
     --headline-size:clamp(2rem, min(9vw, 10svh), 3.25rem);
@@ -298,10 +310,11 @@ h1 span{grid-area:1/1;}
    ========================= */
 .stage{
   position:relative;
-  width:100%;
   flex:1 1 auto;
   min-height:0;               /* lets the stage shrink instead of overflowing */
-  margin-bottom:var(--gap-hippo-to-footer);
+  margin:0 calc(-1 * var(--hippo-bleed-right)) var(--gap-hippo-to-footer) calc(-1 * var(--hippo-bleed-left));
+  width:auto;
+  align-self:stretch;
   display:flex;
   align-items:center;
   justify-content:var(--hippo-align);
@@ -407,6 +420,7 @@ h1 span{grid-area:1/1;}
   /* the button drops to its own full-width row rather than squeezing beside the input */
   .field{flex:1 1 100%;}
   .notify button{flex:1 1 100%;align-self:stretch;}
+  .notify input{text-align:var(--mobile-input-text-align);}
 }
 
 
@@ -630,10 +644,19 @@ starts here.</span><span id="l2">Coming soon.</span></h1>
   /* Clearance rules around the centre logo hippo, which is the fixed purple one.
        - nothing in the 7 rows directly below it unless it is 7+ columns away
        - nothing in the columns either side of it unless it is 15+ rows down
-     Both are measured in grid steps from the centre. */
-  function clearOfCentre(i,j){
-    if(j>0 && j<=7 && Math.abs(i)<7) return false;
-    if(Math.abs(i)<=1 && j<15) return false;
+     Both are measured in grid steps from the centre.
+     A coarse grid (desktop, where each step is a much bigger visual distance)
+     cannot honour the full clearance, so the rules relax a level at a time
+     until enough of the field is left to place the accents. */
+  var CLEARANCE=[
+    {belowRows:7, belowCols:7, sideRows:15},   /* as specified — mobile uses this */
+    {belowRows:4, belowCols:4, sideRows:8},
+    {belowRows:2, belowCols:2, sideRows:4},
+    {belowRows:0, belowCols:0, sideRows:0}     /* nothing beyond the centre itself */
+  ];
+  function clearOfCentre(i,j,rule){
+    if(j>0 && j<=rule.belowRows && Math.abs(i)<rule.belowCols) return false;
+    if(Math.abs(i)<=1 && j<rule.sideRows) return false;
     return true;
   }
 
@@ -646,12 +669,23 @@ starts here.</span><span id="l2">Coming soon.</span></h1>
 
     /* the field is built with a ring of tiles beyond the edges so it looks
        continuous — those can never be chosen, or the purple ones land off screen */
-    var inside=cells.filter(function(c){ return c.onScreen; });
-    var clear=inside.filter(function(c){ return clearOfCentre(c.i,c.j); });
-    /* if the clearance rules leave too little grid, fall back to the plain
-       on-screen set rather than dropping the accents entirely */
-    if(clear.length>=1) inside=clear;
-    if(!inside.length) return {};
+    var onScreen=cells.filter(function(c){ return c.onScreen; });
+    if(!onScreen.length) return {};
+
+    /* take the strictest clearance that still leaves enough distinct rows and
+       columns for the requested number of accents */
+    var rule=CLEARANCE[CLEARANCE.length-1], clear=onScreen;
+    for(var a=0;a<CLEARANCE.length;a++){
+      var test=onScreen.filter(function(c){ return clearOfCentre(c.i,c.j,CLEARANCE[a]); });
+      var tr=[], tc=[];
+      for(var b=0;b<test.length;b++){
+        if(tr.indexOf(test[b].j)<0) tr.push(test[b].j);
+        if(tc.indexOf(test[b].i)<0) tc.push(test[b].i);
+      }
+      if(Math.min(tr.length,tc.length)>=Math.floor(T.purpleCount)){ rule=CLEARANCE[a]; clear=test; break; }
+      if(a===0 || Math.min(tr.length,tc.length)>1){ rule=CLEARANCE[a]; clear=test; }
+    }
+    var inside=clear.length?clear:onScreen;
 
     var rows=[], cols=[], k;
     for(k=0;k<inside.length;k++){
@@ -700,7 +734,7 @@ starts here.</span><span id="l2">Coming soon.</span></h1>
         var ci=order[k], rj=pickRows[k];
         /* never adjacent to (or on) the centre logo, and it must be a real cell */
         if((Math.abs(ci)<=1&&Math.abs(rj)<=1) || !free[ci+','+rj]) continue;
-        if(clear.length>=1 && !clearOfCentre(ci,rj)) continue;
+        if(!clearOfCentre(ci,rj,rule)) continue;
         pts.push([ci,rj]);
       }
       if(!pts.length) continue;
@@ -715,10 +749,27 @@ starts here.</span><span id="l2">Coming soon.</span></h1>
         }
       }
       if(pts.length===1) minD=99;
-      var score=pts.length*10+minD-diagonal*2;
+      var score=pts.length*10+minD-diagonal*2+(pts.length%2?5:0);
       if(score>bestScore){ bestScore=score; best=pts; }
     }
     if(!best) return {};
+
+    /* a pairing can lose a member to the clearance tests, so enforce the odd
+       rule on the result too — drop whichever hippo sits closest to another,
+       keeping the remaining set as spread out as possible */
+    if(best.length%2===0 && best.length>0){
+      var dropAt=0, worst=Infinity;
+      for(var p2=0;p2<best.length;p2++){
+        var near=Infinity;
+        for(var q3=0;q3<best.length;q3++){
+          if(q3===p2) continue;
+          near=Math.min(near, Math.abs(best[p2][0]-best[q3][0])+Math.abs(best[p2][1]-best[q3][1]));
+        }
+        if(near<worst){ worst=near; dropAt=p2; }
+      }
+      best=best.slice(0,dropAt).concat(best.slice(dropAt+1));
+    }
+
     var chosen={};
     for(k=0;k<best.length;k++) chosen[best[k][0]+','+best[k][1]]=true;
     return chosen;

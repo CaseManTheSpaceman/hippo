@@ -32,6 +32,7 @@ First public release of the Skin by hippO coming-soon page.
 
 **Deployment**
 - Static site with a `vercel.json` config, including long-lived cache headers for the self-hosted fonts. No build step required.
+- Vercel Web Analytics, added as two script tags with no package install or build step.
 
 ### Improved
 

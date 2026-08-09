@@ -627,6 +627,16 @@ starts here.</span><span id="l2">Coming soon.</span></h1>
     };
   }
 
+  /* Clearance rules around the centre logo hippo, which is the fixed purple one.
+       - nothing in the 7 rows directly below it unless it is 7+ columns away
+       - nothing in the columns either side of it unless it is 15+ rows down
+     Both are measured in grid steps from the centre. */
+  function clearOfCentre(i,j){
+    if(j>0 && j<=7 && Math.abs(i)<7) return false;
+    if(Math.abs(i)<=1 && j<15) return false;
+    return true;
+  }
+
   /* Pick which cells of the field are brand purple.
      One per row, one per column, never touching the centre logo, and spread
      as far apart as the grid allows. */
@@ -637,6 +647,10 @@ starts here.</span><span id="l2">Coming soon.</span></h1>
     /* the field is built with a ring of tiles beyond the edges so it looks
        continuous — those can never be chosen, or the purple ones land off screen */
     var inside=cells.filter(function(c){ return c.onScreen; });
+    var clear=inside.filter(function(c){ return clearOfCentre(c.i,c.j); });
+    /* if the clearance rules leave too little grid, fall back to the plain
+       on-screen set rather than dropping the accents entirely */
+    if(clear.length>=1) inside=clear;
     if(!inside.length) return {};
 
     var rows=[], cols=[], k;
@@ -686,6 +700,7 @@ starts here.</span><span id="l2">Coming soon.</span></h1>
         var ci=order[k], rj=pickRows[k];
         /* never adjacent to (or on) the centre logo, and it must be a real cell */
         if((Math.abs(ci)<=1&&Math.abs(rj)<=1) || !free[ci+','+rj]) continue;
+        if(clear.length>=1 && !clearOfCentre(ci,rj)) continue;
         pts.push([ci,rj]);
       }
       if(!pts.length) continue;

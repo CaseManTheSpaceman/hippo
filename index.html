@@ -29,8 +29,9 @@
 *,*::before,*::after{box-sizing:border-box;}
 html,body{margin:0;overflow:hidden;background:var(--cream);color:var(--ink);font-family:var(--serif);}
 a{color:var(--dark-purple);} a:hover{color:var(--medium-purple);}
-@keyframes eye-close{0%,5.2%,7.1%,62%,64%,100%{transform:scaleY(1);}5.8%,6.6%,62.6%,63.5%{transform:scaleY(.08);}}
-.eye{transform-origin:1448px 235px;animation:eye-close 7s ease-in-out 3.25s infinite;}
+@keyframes eye-close{0%,100%{transform:scaleY(1);}45%,60%{transform:scaleY(.08);}}
+.eye{transform-origin:1448px 235px;}
+.eye.blink{animation:eye-close .5s ease-in-out;}
 
 .page{width:100%;height:100svh;min-height:100svh;display:flex;flex-direction:column;}
 #tiles{position:fixed;inset:0;z-index:5;pointer-events:none;}
@@ -47,6 +48,8 @@ h1 span{grid-area:1/1;}
 .page.p3 #l1,.page.p4 #l1{opacity:1;}
 .page.p5 #l1{opacity:0;transition:opacity .55s ease;}
 .page.p5 #l2{opacity:1;transition:opacity .9s ease .35s;}
+.page.sent #l1{opacity:1;transition:opacity .9s ease .6s;}
+.page.sent #l2{opacity:0;transition:opacity .5s ease;}
 .stage{position:relative;width:100%;flex:1 1 auto;min-height:0;padding:0 clamp(1.25rem,7vw,7rem);display:flex;align-items:center;justify-content:flex-start;overflow:hidden;opacity:0;transition:opacity 2s ease;}
 .page.hippo-shown .stage{opacity:1;}
 .trigger{appearance:none;width:100%;height:100%;margin:0;padding:0;border:0;background:transparent;cursor:pointer;transition:opacity .35s ease;}
@@ -132,7 +135,7 @@ starts here.</span><span id="l2">Coming Soon</span></h1>
       </div>
       <button type="submit" id="submit">Notify me</button>
     </form>
-    <p class="thanks" id="thanks" role="status">Thank you — we'll be in touch.</p>
+    <p class="thanks" id="thanks" role="status">We'll be in touch.</p>
   </div>
   <footer>© 2026 hippocraticOath LLC. All rights reserved.</footer>
 </div>
@@ -141,7 +144,7 @@ starts here.</span><span id="l2">Coming Soon</span></h1>
   // Paste your endpoint here. Works with either:
   //   Google Sheet  — the /exec URL from Apps Script (see google-apps-script.gs)
   //   Formspree     — https://formspree.io/f/YOUR_FORM_ID
-  var FORM_ENDPOINT='https://script.google.com/macros/s/AKfycbwb5MpAacIiTcNw6Q0g-ch5ti4fkZvd-pAwSzKofnZgG6qVP__Jcq3MZx3XWw-zjiFu/exec';
+  var FORM_ENDPOINT='PASTE_YOUR_ENDPOINT_HERE';
 
   var page=document.getElementById('page'), stage=document.getElementById('stage'),
       hippo=document.getElementById('hippo'), svg=document.getElementById('hippoSvg'),
@@ -199,10 +202,21 @@ starts here.</span><span id="l2">Coming Soon</span></h1>
     cycle=[
       setTimeout(function(){ setPhase(3); }, base),
       setTimeout(function(){ setPhase(4); }, base+1700),
+      setTimeout(blink, base+3050),                                  // one blink, once the hippo is fully up
       setTimeout(function(){ setPhase(5); }, base+3700),
       setTimeout(function(){ auto=true; paint(); armIdle(); }, base+5400)
     ];
   }
+  // restart the animation by removing and re-adding the class
+  function blink(){
+    var eye=document.querySelector('.eye');
+    if(!eye) return;
+    eye.classList.remove('blink');
+    if(eye.getAnimations) eye.getAnimations().forEach(function(a){ a.cancel(); });
+    void document.body.offsetWidth;   // SVG nodes have no offsetWidth of their own
+    eye.classList.add('blink');
+  }
+
   function clearCycle(){ cycle.forEach(clearTimeout); clearTimeout(idle); }
   function armIdle(){
     clearTimeout(idle);

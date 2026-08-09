@@ -11,76 +11,410 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="./fonts/Petrona-600.woff2">
 <link rel="preload" as="font" type="font/woff2" crossorigin href="./fonts/Quicksand-500.woff2">
 <style>
+/* =========================
+   FONTS
+   ========================= */
 @font-face{font-family:'Petrona';font-style:normal;font-weight:300;font-display:swap;src:url('./fonts/Petrona-300.woff2') format('woff2');}
 @font-face{font-family:'Petrona';font-style:normal;font-weight:400;font-display:swap;src:url('./fonts/Petrona-400.woff2') format('woff2');}
 @font-face{font-family:'Petrona';font-style:normal;font-weight:600;font-display:swap;src:url('./fonts/Petrona-600.woff2') format('woff2');}
 @font-face{font-family:'Quicksand';font-style:normal;font-weight:500;font-display:swap;src:url('./fonts/Quicksand-500.woff2') format('woff2');}
+/* Georgia stand-in with Petrona's metrics, so the headline does not reflow when the real font loads */
 @font-face{font-family:'Petrona Fallback';src:local('Georgia'),local('Times New Roman');size-adjust:92%;ascent-override:96%;descent-override:24%;line-gap-override:0%;}
-:root{
-  --cream:#FEFCF6; --ink:#102845; --white:#FFFFFF;
-  --hippo-purple:#B9BCEF; --medium-purple:#8080E8; --dark-purple:#6969C9;
-  --web-grey:#67737F;
-  --serif:'Petrona','Petrona Fallback',Georgia,serif;
-  --round:'Quicksand',sans-serif;
-  --pill:999px; --border:1.5px solid #DCDDF7;
-  --shadow-soft:0 2px 10px rgba(16,40,69,.08);
-  --ease-soft:cubic-bezier(.4,0,.2,1);
-}
-*,*::before,*::after{box-sizing:border-box;}
-html,body{margin:0;overflow:hidden;background:var(--cream);color:var(--ink);font-family:var(--serif);}
-a{color:var(--dark-purple);} a:hover{color:var(--medium-purple);}
-@keyframes eye-close{0%,100%{transform:scaleY(1);}45%,60%{transform:scaleY(.08);}}
-.eye{transform-origin:1448px 235px;}
-.eye.blink{animation:eye-close .5s ease-in-out;}
 
-.page{width:100%;height:100svh;min-height:100svh;display:flex;flex-direction:column;}
-#tiles{position:fixed;inset:0;z-index:5;pointer-events:none;}
-#tiles span{position:absolute;display:block;background-image:url("data:image/svg+xml;utf8,%3C%3Fxml%20version%3D%221.0%22%3F%3E%3Csvg%20id%3D%22Layer_1%22%20data-name%3D%22Layer%201%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%222000%22%20height%3D%22754.974%22%20viewBox%3D%220%200%202000%20754.974%22%3E%3Cg%3E%3Cpath%20d%3D%22M1269.676%2C53.179c-58.799-10.65-80.141%2C98.124-2.865%2C98.124%2C41.328%2C0%2C65.279-86.818%2C2.865-98.124Z%22%20fill%3D%22%23f3f3ff%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M689.818%2C610.334c310.19%2C0%2C291.929%2C54.422%2C312.614%2C106.208%2C4.456%2C11.155%2C18.747%2C32.718%2C47.03%2C32.718h121.659c18.251%2C0%2C30.919-18.231%2C24.471-35.305-43.329-114.735-23.839-231.858%2C72.865-249.69%2C98.345-18.135%2C189.38%2C30.096%2C391.976%2C30.096%2C268.518%2C0%2C281.11-134.814%2C269.492-212.844-11.618-78.03-65.255-151.022-293.28-151.022-119.428%2C0-275.852%2C20.289-370.997%2C20.289-154.258%2C0-644.366-82.645-887.077-82.645S16.752%2C198.304%2C16.752%2C363.963c0%2C185.56%2C146.987%2C253.688%2C173.717%2C368%2C2.345%2C10.028%2C6.932%2C17.297%2C20.916%2C17.297h115.135c11.532%2C0%2C17.029-3.934%2C14.017-22.443-6.636-40.784%2C20.584-116.483%2C349.281-116.483ZM1433.014%2C284.83c-26.146%2C3.301-48.137-18.678-44.848-44.822%2C2.241-17.813%2C16.623-32.199%2C34.435-34.448%2C26.146-3.301%2C48.137%2C18.678%2C44.848%2C44.822-2.241%2C17.813-16.623%2C32.199-34.435%2C34.448Z%22%20fill%3D%22%23f3f3ff%22%3E%3C%2Fpath%3E%3C%2Fg%3E%3Cg%3E%3Cpath%20d%3D%22M1448.103%2C184.279c-22.03%2C2.777-40.034%2C20.781-42.797%2C42.811-1.948%2C15.441%2C3.201%2C30.566%2C14.132%2C41.488%2C9.407%2C9.393%2C21.918%2C14.519%2C35.067%2C14.519%2C2.125%2C0%2C4.273-.13%2C6.421-.41%2C22.03-2.777%2C40.034-20.781%2C42.801-42.811%2C1.943-15.441-3.206-30.566-14.137-41.488-10.922-10.922-26.065-16.066-41.488-14.109ZM1484.586%2C237.461c-1.687%2C13.419-12.66%2C24.387-26.069%2C26.083h-.005c-9.477%2C1.193-18.745-1.948-25.436-8.62-6.672-6.672-9.822-15.945-8.634-25.422%2C1.691-13.419%2C12.66-24.387%2C26.079-26.083%2C1.328-.168%2C2.642-.252%2C3.956-.252%2C8.07%2C0%2C15.73%2C3.131%2C21.475%2C8.872%2C6.677%2C6.672%2C9.827%2C15.945%2C8.634%2C25.422Z%22%20fill%3D%22%23102845%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M1996.518%2C266.089c-13.195-83.954-76.191-184.038-301.4-184.038-64.78%2C0-144.293%2C4.641-221.178%2C9.132-50.709%2C2.963-99.302%2C5.796-139.666%2C7.026%2C7.888-10.493%2C12.967-23.81%2C14.155-37.014%2C2.791-31.097-15.162-54.767-45.751-60.312-19.919-3.597-38.38%2C3.895-50.839%2C20.529-14.505%2C19.355-17.538%2C47.051-7.381%2C67.366%2C1.528%2C3.057%2C3.7%2C5.517%2C5.712%2C8.117-76.284-5.358-191.577-21.014-312.326-37.415C746.165%2C33.434%2C528.915%2C3.922%2C390.227%2C3.922%2C120.661%2C3.922%2C0%2C165.072%2C0%2C324.779c0%2C132.179%2C65.521%2C223.615%2C118.172%2C297.085%2C29.01%2C40.481%2C54.073%2C75.455%2C61.271%2C107.884%2C1.389%2C6.234%2C5.615%2C25.226%2C30.799%2C25.226h157.936c9.775%2C0%2C18.13-4.054%2C22.901-11.127%2C3.895-5.768%2C7.124-16.178.377-32.942-4.687-11.621-3.937-21.732%2C2.264-30.92%2C14.687-21.75%2C74.108-58.234%2C307.079-58.234%2C259.553%2C0%2C311.646%2C21.881%2C336.369%2C87.625%2C8.909%2C23.679%2C22.235%2C45.597%2C59.072%2C45.597h123.465c11.956%2C0%2C23.143-5.871%2C29.937-15.702%2C6.775-9.803%2C8.308-22.309%2C4.096-33.436-32.686-86.572-36.381-174.486-9.412-223.979%2C12.804-23.511%2C32.178-38.217%2C57.577-43.687%2C45.849-9.869%2C95.318%2C3.047%2C157.931%2C19.393%2C66.975%2C17.482%2C150.327%2C39.26%2C258.505%2C39.26%2C117.963%2C0%2C200.071-26.083%2C244.042-77.505%2C32.63-38.151%2C44.111-89.703%2C34.135-153.23ZM1267.275%2C32.978c4.058-5.414%2C12.441-13.68%2C25.753-13.68%2C1.966%2C0%2C4.03.177%2C6.206.578%2C29.778%2C5.386%2C30.883%2C29.485%2C29.969%2C39.596-1.705%2C18.992-14.579%2C39.307-31.041%2C39.372h-.168c-17.622-.028-30.165-6.486-36.278-18.703-6.915-13.801-4.571-33.641%2C5.559-47.163ZM1947.719%2C406.776c-40.141%2C46.948-117.32%2C70.749-229.379%2C70.749-105.704%2C0-187.724-21.415-253.631-38.636-65.083-16.998-116.49-30.435-166.868-19.57-31.139%2C6.7-54.841%2C24.639-70.46%2C53.304-35.85%2C65.8-19.211%2C167.134%2C8.308%2C240.035%2C2.004%2C5.284%2C1.3%2C10.987-1.915%2C15.646-3.243%2C4.687-8.364%2C7.371-14.067%2C7.371h-123.465c-21.624%2C0-31.591-8.042-41.012-33.101-28.711-76.34-81.344-100.122-354.429-100.122-184.476%2C0-293.166%2C22.449-323.066%2C66.723-9.794%2C14.509-11.234%2C31.423-4.18%2C48.943%2C2.721%2C6.747%2C3.29%2C12.329%2C1.533%2C14.929-1.649%2C2.442-5.708%2C2.628-6.91%2C2.628h-157.936c-8.247%2C0-10.297-2.647-11.961-10.12-8.056-36.269-34.177-72.724-64.431-114.929-51.035-71.224-114.552-159.865-114.552-285.846C19.299%2C116.465%2C205.597%2C23.221%2C390.227%2C23.221c137.383%2C0%2C353.949%2C29.42%2C545.022%2C55.373%2C156.226%2C21.228%2C291.158%2C39.559%2C361.749%2C39.559.322%2C0%2C.685-.009%2C1.006-.009.028%2C0%2C.056.009.084.009.033%2C0%2C.056-.009.089-.009%2C46.054-.065%2C109.594-3.765%2C176.886-7.697%2C76.62-4.473%2C155.83-9.095%2C220.055-9.095%2C169.859%2C0%2C264.851%2C56.435%2C282.338%2C167.73%2C9.063%2C57.693-.941%2C104.026-29.736%2C137.695Z%22%20fill%3D%22%23102845%22%3E%3C%2Fpath%3E%3C%2Fg%3E%3C%2Fsvg%3E");background-size:100% 100%;background-repeat:no-repeat;transition:opacity .7s ease;}
-.masthead{flex:0 0 auto;display:flex;justify-content:center;align-items:center;padding:clamp(1rem,3vmin,2.5rem) clamp(1.25rem,7vw,7rem) 0;}
-.masthead svg{display:block;width:clamp(45px,14vw,220px);height:auto;overflow:visible;}
+
+/* =========================
+   DESIGN CONTROLS
+   Everything you are likely to want to tune lives here.
+   Values are the ones the page shipped with, so changing
+   nothing leaves the design exactly as it was.
+   ========================= */
+:root{
+  /* ---- Brand colours (from the hippO design system) ---- */
+  --cream:#FEFCF6;              /* page background */
+  --ink:#102845;                /* headline + body text */
+  --white:#FFFFFF;              /* input background */
+  --hippo-purple:#B9BCEF;       /* the hippo, and the Notify button */
+  --medium-purple:#8080E8;      /* button hover, input focus ring */
+  --dark-purple:#6969C9;        /* button press, thank-you message */
+  --web-grey:#67737F;           /* footer text */
+  --border-colour:#DCDDF7;      /* input outline */
+
+  /* ---- Typefaces ---- */
+  --serif:'Petrona','Petrona Fallback',Georgia,serif;   /* headline, form */
+  --round:'Quicksand',sans-serif;                        /* footer only */
+
+  /* ---- PAGE PADDING ---- */
+  --page-padding-x:clamp(1.25rem, 7vw, 7rem);
+  /* Left/right margin for logo, headline, hippo and footer. Raise to pull everything inward. */
+  --page-padding-top:clamp(1rem, 3vmin, 2.5rem);
+  /* Space above the logo. */
+  --page-padding-bottom:max(1.25rem, env(safe-area-inset-bottom));
+  /* Space below the footer. The env() part keeps clear of the iPhone home bar. */
+
+  /* ---- LOGO ---- */
+  --logo-width:clamp(45px, 14vw, 220px);
+  /* Overall width of the logo lockup. The 45px floor is the minimum legible size. */
+
+  /* ---- VERTICAL RHYTHM ---- */
+  --gap-logo-to-headline:clamp(.75rem, 3vmin, 2.5rem);
+  /* Space between the logo and "Healthy skin starts here." */
+  --gap-headline-to-hippo:clamp(.75rem, 3vmin, 3rem);
+  /* Space between the headline and the hippo area. */
+  --gap-hippo-to-footer:1rem;
+  /* Space between the hippo area and the copyright line. */
+
+  /* ---- HEADLINE ---- */
+  --headline-size:clamp(2rem, min(9vw, 10svh), 7.25rem);
+  /* Grows with the window but never past 7.25rem. The 10svh term keeps it from
+     swallowing short screens. */
+  --headline-line-height:.95;   /* tighter than 1 = lines sit closer together */
+  --headline-letter-spacing:-.045em;  /* negative = letters pull together */
+  --headline-weight:300;        /* Petrona Light */
+
+  /* ---- HIPPO ---- */
+  --hippo-width:min(100%, max(60%, 280px));
+  /* Width of the hippo inside the stage. Raise the 60% to make it bigger. */
+  --hippo-height:60%;
+  /* Share of the stage height the hippo fills. Raise to make it taller. */
+  --hippo-slide:.31;
+  /* How far down the hippo slides (as a share of its own height) to clear room
+     for the email form. The page enlarges this automatically if the form needs
+     more room, so treat it as a minimum. */
+  --hippo-align:flex-start;
+  /* flex-start = hippo hugs the left margin. center = centred in the stage. */
+
+  /* ---- EMAIL FORM ---- */
+  --form-width:min(88%, 34rem);   /* overall width of the input + button row */
+  --form-row-gap:.85rem;          /* vertical gap when the button wraps below */
+  --form-column-gap:.65rem;       /* gap between input and button */
+  --input-height:3.25rem;
+  --input-padding-x:1.5rem;
+  --input-font-size:16px;         /* keep at 16px — anything smaller makes iOS zoom on focus */
+  --button-height:3.25rem;
+  --button-padding-x:1.75rem;
+  --button-font-size:16px;
+  --form-nudge-up:14px;
+  /* Lifts the form slightly within the space above the hippo. Raise to move it up. */
+
+  /* ---- FOOTER ---- */
+  --footer-size:12px;
+
+  /* ---- ANIMATION TIMINGS (ms) ----
+     The JavaScript reads these, so the whole sequence is tuned from here.
+     The clock starts when the page loads. */
+  --t-field-clears:1100;      /* hippo field begins fading away */
+  --t-wordmark:2200;          /* logo wordmark fades in */
+  --t-sequence-start:2750;    /* headline + footer fade in — beat 1 */
+  --t-headline-to-hippo:1700; /* wait from headline until the hippo reveals */
+  --t-hippo-to-blink:3050;    /* wait from headline until the hippo blinks */
+  --t-hippo-to-swap:3700;     /* wait from headline until "Coming Soon" appears */
+  --t-swap-to-form:5400;      /* wait from headline until the email form appears */
+  --t-idle-reset:5000;        /* idle time before the sequence replays */
+  --t-loop-restart:900;       /* pause after a rewind before beat 1 plays again */
+
+  /* ---- ANIMATION DURATIONS ---- */
+  --dur-hippo-reveal:2s;      /* how long the hippo takes to fade in */
+  --dur-hippo-slide:1s;       /* how long the hippo takes to slide down */
+  --dur-form:1s;              /* how long the email form takes to arrive */
+  --dur-headline-in:.9s;      /* headline fade in */
+  --dur-headline-out:.55s;    /* headline fade out during the swap */
+  --dur-blink:.5s;
+  --dur-tile-fade:.7s;        /* each hippo tile's fade */
+  --tile-stagger:.55;         /* how much later the far tiles clear than the near ones */
+
+  /* ---- EASING ---- */
+  --ease-soft:cubic-bezier(.4,0,.2,1);        /* hovers and small state changes */
+  --ease-slide:cubic-bezier(.2,.75,.25,1);    /* the hippo's slide */
+
+  /* ---- SHAPE ---- */
+  --pill:999px;
+  --border:1.5px solid var(--border-colour);
+  --shadow-soft:0 2px 10px rgba(16,40,69,.08);
+}
+
+/* ---- MOBILE OVERRIDES ----
+   Only the variables that actually differ. Everything else is inherited,
+   so there is one place to change each value. Breakpoint: 600px. */
+@media (max-width:600px){
+  :root{
+    --page-padding-x:1.25rem;
+    /* Side margin on phones. Lower for a wider composition. */
+    --gap-logo-to-headline:2rem;  
+    /* space above H1 */
+    --gap-headline-to-hippo:2rem;   
+    /* space below H1 */
+    --mobile-hippo-width:100%;
+    --hippo-width:var(--mobile-hippo-width);
+    /* Increase this to make the hippo larger on mobile. */
+    --hippo-height:82%;
+    /* Share of the stage the hippo fills on mobile. */
+    --hippo-slide:.42;
+    /* Mobile needs a bigger slide because the hippo is taller. */
+    --form-width:min(82%, 17.5rem);
+    --form-row-gap:.5rem;
+    --input-height:2.75rem;      /* 44px — the minimum comfortable tap target */
+    --input-padding-x:.95rem;
+    --button-height:2.75rem;
+    --button-padding-x:1rem;
+    --button-font-size:14px;
+    --form-nudge-up:8px;
+    --headline-size:clamp(2rem, min(9vw, 10svh), 3.25rem);
+  }
+   /* Move only “Healthy skin starts here” down */
+   #l1{
+    transform:translateY(20px);
+  }
+}
+
+/* ---- SHORT SCREENS ----
+   Height-based, so it catches any phone in landscape or a small laptop
+   rather than targeting specific devices. */
+@media (max-height:640px){
+  :root{
+    --page-padding-top:.75rem;
+    --gap-logo-to-headline:.5rem;
+    --gap-headline-to-hippo:.5rem;
+    --gap-hippo-to-footer:.5rem;
+    --headline-size:clamp(1.75rem, min(8vw, 12svh), 3rem);
+    --logo-width:clamp(45px, 11vw, 150px);
+  }
+}
+
+
+/* =========================
+   BASE / RESET
+   ========================= */
+*,*::before,*::after{box-sizing:border-box;}
+html,body{
+  margin:0;
+  overflow:hidden;
+  background:var(--cream);
+  color:var(--ink);
+  font-family:var(--serif);
+  -webkit-text-size-adjust:100%;   /* stop iOS inflating text in landscape */
+}
+a{color:var(--dark-purple);}
+a:hover{color:var(--medium-purple);}
+.sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
+
+
+/* =========================
+   PAGE LAYOUT
+   One column: logo, headline, stage, footer.
+   The stage is the only flexible row — it absorbs whatever height is left,
+   so nothing is ever pushed off the bottom.
+   ========================= */
+.page{
+  width:100%;
+  height:100svh;          /* svh = the small viewport height, so mobile browser
+                             chrome appearing cannot cut the page off */
+  min-height:100svh;
+  display:flex;
+  flex-direction:column;
+  padding:var(--page-padding-top) var(--page-padding-x) var(--page-padding-bottom);
+  gap:0;
+}
+@supports (height:100dvh){
+  .page{height:100dvh;min-height:100dvh;}   /* follows the chrome as it hides */
+}
+
+
+/* =========================
+   LOGO
+   ========================= */
+.masthead{
+  flex:0 0 auto;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+.masthead svg{display:block;width:var(--logo-width);height:auto;overflow:visible;}
 #word{opacity:0;transition:opacity .7s ease;}
 .page.p2 #word,.page.p3 #word,.page.p4 #word,.page.p5 #word{opacity:1;}
-h1{margin:0;padding:clamp(.75rem,3vmin,2.5rem) clamp(1.25rem,7vw,7rem) clamp(.75rem,3vmin,3rem);flex:0 0 auto;font-size:clamp(2rem,min(9vw,10svh),7.25rem);font-weight:300;line-height:.95;letter-spacing:-.045em;white-space:pre-line;display:grid;font-family:var(--serif);opacity:0;transition:opacity .9s ease .1s;}
+
+
+/* =========================
+   TYPOGRAPHY
+   Both headlines share one grid cell so swapping them shifts nothing.
+   ========================= */
+h1{
+  margin:var(--gap-logo-to-headline) 0 var(--gap-headline-to-hippo);
+  flex:0 0 auto;
+  display:grid;
+  font-family:var(--serif);
+  font-size:var(--headline-size);
+  font-weight:var(--headline-weight);
+  line-height:var(--headline-line-height);
+  letter-spacing:var(--headline-letter-spacing);
+  white-space:pre-line;
+  opacity:0;
+  transition:opacity var(--dur-headline-in) ease .1s;
+}
 .page.chrome h1{opacity:1;}
 h1 span{grid-area:1/1;}
-#l1{opacity:0;transition:opacity .9s ease .6s;}
+#l1{opacity:0;transition:opacity var(--dur-headline-in) ease .6s;}
 #l2{align-self:center;opacity:0;transition:opacity .5s ease;}
 .page.p3 #l1,.page.p4 #l1{opacity:1;}
-.page.p5 #l1{opacity:0;transition:opacity .55s ease;}
-.page.p5 #l2{opacity:1;transition:opacity .9s ease .35s;}
-.page.sent #l1{opacity:1;transition:opacity .9s ease .6s;}
+.page.p5 #l1{opacity:0;transition:opacity var(--dur-headline-out) ease;}
+.page.p5 #l2{opacity:1;transition:opacity var(--dur-headline-in) ease .35s;}
+/* after a successful signup the headline returns to "Healthy skin starts here." */
+.page.sent #l1{opacity:1;transition:opacity var(--dur-headline-in) ease .6s;}
 .page.sent #l2{opacity:0;transition:opacity .5s ease;}
-.stage{position:relative;width:100%;flex:1 1 auto;min-height:0;padding:0 clamp(1.25rem,7vw,7rem);display:flex;align-items:center;justify-content:flex-start;overflow:hidden;opacity:0;transition:opacity 2s ease;}
+
+
+/* =========================
+   HIPPO
+   The stage is a normal flex row. Absolute positioning is used only for the
+   form and thank-you, which have to sit OVER the hippo for the reveal.
+   ========================= */
+.stage{
+  position:relative;
+  width:100%;
+  flex:1 1 auto;
+  min-height:0;               /* lets the stage shrink instead of overflowing */
+  margin-bottom:var(--gap-hippo-to-footer);
+  display:flex;
+  align-items:center;
+  justify-content:var(--hippo-align);
+  overflow:hidden;            /* the hippo is cropped, never spilled sideways */
+  opacity:0;
+  transition:opacity var(--dur-hippo-reveal) ease;
+}
 .page.hippo-shown .stage{opacity:1;}
-.trigger{appearance:none;width:100%;height:100%;margin:0;padding:0;border:0;background:transparent;cursor:pointer;transition:opacity .35s ease;}
+.trigger{
+  appearance:none;
+  width:100%;height:100%;
+  margin:0;padding:0;border:0;
+  background:transparent;
+  cursor:pointer;
+  transition:opacity .35s ease;
+}
 .page.open .trigger{opacity:.12;}
-#hippo{display:block;width:min(100%,max(60%,280px));height:60%;will-change:opacity,transform;transform-origin:center bottom;transition:transform 1s cubic-bezier(.2,.75,.25,1);}
+#hippo{
+  display:block;
+  width:var(--hippo-width);
+  height:var(--hippo-height);
+  max-width:100%;             /* can never overflow horizontally */
+  will-change:opacity,transform;
+  transform-origin:center bottom;
+  transition:transform var(--dur-hippo-slide) var(--ease-slide);
+}
 #hippo svg{display:block;width:100%;height:100%;overflow:visible;}
 
-.notify{position:absolute;z-index:2;top:19.3%;left:50%;width:min(88%,34rem);display:flex;flex-wrap:wrap;row-gap:.85rem;column-gap:.65rem;
-  transition:opacity 1s ease .08s, transform 1s ease .08s;opacity:0;transform:translate(-50%,calc(-50% + 18px));pointer-events:none;}
+
+/* =========================
+   FORM
+   ========================= */
+.notify{
+  position:absolute;
+  z-index:2;
+  top:19.3%;                  /* JS refines this once it can measure the stage */
+  left:50%;
+  width:var(--form-width);
+  display:flex;
+  flex-wrap:wrap;
+  row-gap:var(--form-row-gap);
+  column-gap:var(--form-column-gap);
+  opacity:0;
+  transform:translate(-50%, calc(-50% + 18px));
+  transition:opacity var(--dur-form) ease .08s, transform var(--dur-form) ease .08s;
+  pointer-events:none;
+}
 .page.open .notify{opacity:1;transform:translate(-50%,-50%);pointer-events:auto;}
-.field{flex:1 1 14rem;min-width:0;display:flex;flex-direction:column;gap:.6rem;}
-.notify input{width:100%;min-width:0;height:3.25rem;padding:0 1.5rem;border:var(--border);border-radius:var(--pill);background:var(--white);color:var(--ink);font-family:var(--serif);font-size:16px;outline:none;transition:border-color .16s var(--ease-soft);}
+.field{flex:1 1 14rem;min-width:0;display:flex;flex-direction:column;}
+.notify input{
+  width:100%;min-width:0;
+  height:var(--input-height);
+  padding:0 var(--input-padding-x);
+  border:var(--border);
+  border-radius:var(--pill);
+  background:var(--white);
+  color:var(--ink);
+  font-family:var(--serif);
+  font-size:var(--input-font-size);
+  outline:none;
+  transition:border-color .16s var(--ease-soft);
+}
 .notify input:focus{border-color:var(--medium-purple);}
-.notify button{flex:1 1 8rem;align-self:flex-end;height:3.25rem;padding:0 1.75rem;border:none;border-radius:var(--pill);background:var(--hippo-purple);color:var(--ink);font-family:var(--serif);font-weight:600;font-size:16px;cursor:pointer;box-shadow:var(--shadow-soft);transition:background .16s var(--ease-soft);}
+.notify button{
+  flex:1 1 8rem;
+  align-self:flex-end;
+  height:var(--button-height);
+  padding:0 var(--button-padding-x);
+  border:none;
+  border-radius:var(--pill);
+  background:var(--hippo-purple);
+  color:var(--ink);
+  font-family:var(--serif);
+  font-weight:600;
+  font-size:var(--button-font-size);
+  cursor:pointer;
+  box-shadow:var(--shadow-soft);
+  transition:background .16s var(--ease-soft);
+}
 .notify button:hover{background:var(--medium-purple);}
 .notify button:active{background:var(--dark-purple);}
-.thanks{position:absolute;z-index:2;left:50%;margin:0;width:min(88%,34rem);text-align:center;font-family:var(--serif);font-size:1.05rem;color:var(--dark-purple);opacity:0;transform:translate(-50%,calc(-50% + 10px));transition:opacity .7s ease .2s, transform .7s ease .2s;pointer-events:none;}
+.notify input.honeypot{width:1px;height:1px;padding:0;border:0;}   /* bot trap, never seen */
+
+.thanks{
+  position:absolute;
+  z-index:2;
+  left:50%;
+  margin:0;
+  width:var(--form-width);
+  text-align:center;
+  font-family:var(--serif);
+  font-size:1.05rem;
+  color:var(--dark-purple);
+  opacity:0;
+  transform:translate(-50%, calc(-50% + 10px));
+  transition:opacity .7s ease .2s, transform .7s ease .2s;
+  pointer-events:none;
+}
 .page.sent .thanks{opacity:1;transform:translate(-50%,-50%);}
 .page.sent .notify{opacity:0;pointer-events:none;}
-.notify input.honeypot{width:1px;height:1px;padding:0;border:0;}
-.sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
-footer{flex:0 0 auto;padding:1rem clamp(1.25rem,7vw,7rem) max(1.25rem,env(safe-area-inset-bottom));font-family:var(--round);font-weight:500;font-size:12px;letter-spacing:.02em;color:var(--web-grey);text-align:center;opacity:0;transition:opacity .9s ease .1s;}
+
+@media (max-width:600px){
+  /* the button drops to its own full-width row rather than squeezing beside the input */
+  .field{flex:1 1 100%;}
+  .notify button{flex:1 1 100%;align-self:stretch;}
+}
+
+
+/* =========================
+   FOOTER
+   ========================= */
+footer{
+  flex:0 0 auto;
+  font-family:var(--round);
+  font-weight:500;
+  font-size:var(--footer-size);
+  letter-spacing:.02em;
+  color:var(--web-grey);
+  text-align:center;
+  opacity:0;
+  transition:opacity var(--dur-headline-in) ease .1s;
+}
 .page.chrome footer{opacity:1;}
 
-@media (max-width:700px){
-  #hippo{width:100%;height:82%;}
-  .notify{width:min(82%,17.5rem);row-gap:.5rem;}
-  .field{flex:1 1 100%;gap:.45rem;}
-  .notify input{height:2.5rem;padding:0 .95rem;}
-  .notify button{flex:1 1 100%;align-self:stretch;height:2.5rem;padding:0 1rem;font-size:14px;}
+
+/* =========================
+   ANIMATION
+   ========================= */
+@keyframes eye-close{0%,100%{transform:scaleY(1);}45%,60%{transform:scaleY(.08);}}
+.eye{transform-origin:1448px 235px;}
+.eye.blink{animation:eye-close var(--dur-blink) ease-in-out;}
+
+#tiles{position:fixed;inset:0;z-index:5;pointer-events:none;}
+#tiles span{
+  position:absolute;
+  display:block;
+  background-image:url("data:image/svg+xml;utf8,%3C%3Fxml%20version%3D%221.0%22%3F%3E%3Csvg%20id%3D%22Layer_1%22%20data-name%3D%22Layer%201%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%222000%22%20height%3D%22754.974%22%20viewBox%3D%220%200%202000%20754.974%22%3E%3Cg%3E%3Cpath%20d%3D%22M1269.676%2C53.179c-58.799-10.65-80.141%2C98.124-2.865%2C98.124%2C41.328%2C0%2C65.279-86.818%2C2.865-98.124Z%22%20fill%3D%22%23f3f3ff%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M689.818%2C610.334c310.19%2C0%2C291.929%2C54.422%2C312.614%2C106.208%2C4.456%2C11.155%2C18.747%2C32.718%2C47.03%2C32.718h121.659c18.251%2C0%2C30.919-18.231%2C24.471-35.305-43.329-114.735-23.839-231.858%2C72.865-249.69%2C98.345-18.135%2C189.38%2C30.096%2C391.976%2C30.096%2C268.518%2C0%2C281.11-134.814%2C269.492-212.844-11.618-78.03-65.255-151.022-293.28-151.022-119.428%2C0-275.852%2C20.289-370.997%2C20.289-154.258%2C0-644.366-82.645-887.077-82.645S16.752%2C198.304%2C16.752%2C363.963c0%2C185.56%2C146.987%2C253.688%2C173.717%2C368%2C2.345%2C10.028%2C6.932%2C17.297%2C20.916%2C17.297h115.135c11.532%2C0%2C17.029-3.934%2C14.017-22.443-6.636-40.784%2C20.584-116.483%2C349.281-116.483ZM1433.014%2C284.83c-26.146%2C3.301-48.137-18.678-44.848-44.822%2C2.241-17.813%2C16.623-32.199%2C34.435-34.448%2C26.146-3.301%2C48.137%2C18.678%2C44.848%2C44.822-2.241%2C17.813-16.623%2C32.199-34.435%2C34.448Z%22%20fill%3D%22%23f3f3ff%22%3E%3C%2Fpath%3E%3C%2Fg%3E%3Cg%3E%3Cpath%20d%3D%22M1448.103%2C184.279c-22.03%2C2.777-40.034%2C20.781-42.797%2C42.811-1.948%2C15.441%2C3.201%2C30.566%2C14.132%2C41.488%2C9.407%2C9.393%2C21.918%2C14.519%2C35.067%2C14.519%2C2.125%2C0%2C4.273-.13%2C6.421-.41%2C22.03-2.777%2C40.034-20.781%2C42.801-42.811%2C1.943-15.441-3.206-30.566-14.137-41.488-10.922-10.922-26.065-16.066-41.488-14.109ZM1484.586%2C237.461c-1.687%2C13.419-12.66%2C24.387-26.069%2C26.083h-.005c-9.477%2C1.193-18.745-1.948-25.436-8.62-6.672-6.672-9.822-15.945-8.634-25.422%2C1.691-13.419%2C12.66-24.387%2C26.079-26.083%2C1.328-.168%2C2.642-.252%2C3.956-.252%2C8.07%2C0%2C15.73%2C3.131%2C21.475%2C8.872%2C6.677%2C6.672%2C9.827%2C15.945%2C8.634%2C25.422Z%22%20fill%3D%22%23102845%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M1996.518%2C266.089c-13.195-83.954-76.191-184.038-301.4-184.038-64.78%2C0-144.293%2C4.641-221.178%2C9.132-50.709%2C2.963-99.302%2C5.796-139.666%2C7.026%2C7.888-10.493%2C12.967-23.81%2C14.155-37.014%2C2.791-31.097-15.162-54.767-45.751-60.312-19.919-3.597-38.38%2C3.895-50.839%2C20.529-14.505%2C19.355-17.538%2C47.051-7.381%2C67.366%2C1.528%2C3.057%2C3.7%2C5.517%2C5.712%2C8.117-76.284-5.358-191.577-21.014-312.326-37.415C746.165%2C33.434%2C528.915%2C3.922%2C390.227%2C3.922%2C120.661%2C3.922%2C0%2C165.072%2C0%2C324.779c0%2C132.179%2C65.521%2C223.615%2C118.172%2C297.085%2C29.01%2C40.481%2C54.073%2C75.455%2C61.271%2C107.884%2C1.389%2C6.234%2C5.615%2C25.226%2C30.799%2C25.226h157.936c9.775%2C0%2C18.13-4.054%2C22.901-11.127%2C3.895-5.768%2C7.124-16.178.377-32.942-4.687-11.621-3.937-21.732%2C2.264-30.92%2C14.687-21.75%2C74.108-58.234%2C307.079-58.234%2C259.553%2C0%2C311.646%2C21.881%2C336.369%2C87.625%2C8.909%2C23.679%2C22.235%2C45.597%2C59.072%2C45.597h123.465c11.956%2C0%2C23.143-5.871%2C29.937-15.702%2C6.775-9.803%2C8.308-22.309%2C4.096-33.436-32.686-86.572-36.381-174.486-9.412-223.979%2C12.804-23.511%2C32.178-38.217%2C57.577-43.687%2C45.849-9.869%2C95.318%2C3.047%2C157.931%2C19.393%2C66.975%2C17.482%2C150.327%2C39.26%2C258.505%2C39.26%2C117.963%2C0%2C200.071-26.083%2C244.042-77.505%2C32.63-38.151%2C44.111-89.703%2C34.135-153.23ZM1267.275%2C32.978c4.058-5.414%2C12.441-13.68%2C25.753-13.68%2C1.966%2C0%2C4.03.177%2C6.206.578%2C29.778%2C5.386%2C30.883%2C29.485%2C29.969%2C39.596-1.705%2C18.992-14.579%2C39.307-31.041%2C39.372h-.168c-17.622-.028-30.165-6.486-36.278-18.703-6.915-13.801-4.571-33.641%2C5.559-47.163ZM1947.719%2C406.776c-40.141%2C46.948-117.32%2C70.749-229.379%2C70.749-105.704%2C0-187.724-21.415-253.631-38.636-65.083-16.998-116.49-30.435-166.868-19.57-31.139%2C6.7-54.841%2C24.639-70.46%2C53.304-35.85%2C65.8-19.211%2C167.134%2C8.308%2C240.035%2C2.004%2C5.284%2C1.3%2C10.987-1.915%2C15.646-3.243%2C4.687-8.364%2C7.371-14.067%2C7.371h-123.465c-21.624%2C0-31.591-8.042-41.012-33.101-28.711-76.34-81.344-100.122-354.429-100.122-184.476%2C0-293.166%2C22.449-323.066%2C66.723-9.794%2C14.509-11.234%2C31.423-4.18%2C48.943%2C2.721%2C6.747%2C3.29%2C12.329%2C1.533%2C14.929-1.649%2C2.442-5.708%2C2.628-6.91%2C2.628h-157.936c-8.247%2C0-10.297-2.647-11.961-10.12-8.056-36.269-34.177-72.724-64.431-114.929-51.035-71.224-114.552-159.865-114.552-285.846C19.299%2C116.465%2C205.597%2C23.221%2C390.227%2C23.221c137.383%2C0%2C353.949%2C29.42%2C545.022%2C55.373%2C156.226%2C21.228%2C291.158%2C39.559%2C361.749%2C39.559.322%2C0%2C.685-.009%2C1.006-.009.028%2C0%2C.056.009.084.009.033%2C0%2C.056-.009.089-.009%2C46.054-.065%2C109.594-3.765%2C176.886-7.697%2C76.62-4.473%2C155.83-9.095%2C220.055-9.095%2C169.859%2C0%2C264.851%2C56.435%2C282.338%2C167.73%2C9.063%2C57.693-.941%2C104.026-29.736%2C137.695Z%22%20fill%3D%22%23102845%22%3E%3C%2Fpath%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  background-size:100% 100%;
+  background-repeat:no-repeat;
+  transition:opacity var(--dur-tile-fade) ease;
 }
+
 @media (prefers-reduced-motion:reduce){
   #tiles{display:none;}
   .page .stage,.page h1,.page footer,.page #word{opacity:1!important;}
@@ -91,6 +425,7 @@ footer{flex:0 0 auto;padding:1rem clamp(1.25rem,7vw,7rem) max(1.25rem,env(safe-a
 <body>
 <div class="page" id="page">
   <div id="tiles" aria-hidden="true"></div>
+
   <div class="masthead">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2707.067 1850.297" role="img" aria-label="hippocraticOath">
       <g id="word"><g>
@@ -112,8 +447,10 @@ footer{flex:0 0 auto;padding:1rem clamp(1.25rem,7vw,7rem) max(1.25rem,env(safe-a
   </g></g>
     </svg>
   </div>
+
   <h1><span id="l1">Healthy skin
 starts here.</span><span id="l2">Coming Soon.</span></h1>
+
   <div class="stage" id="stage">
     <button type="button" class="trigger" id="trigger" aria-label="Show email notification form" aria-expanded="false">
       <span id="hippo">
@@ -127,6 +464,7 @@ starts here.</span><span id="l2">Coming Soon.</span></h1>
   </g></svg>
       </span>
     </button>
+
     <form class="notify" id="notify" action="#" method="post">
       <label class="sr" for="notify-email">Email address</label>
       <input class="sr honeypot" type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true">
@@ -135,144 +473,230 @@ starts here.</span><span id="l2">Coming Soon.</span></h1>
       </div>
       <button type="submit" id="submit">Notify me</button>
     </form>
+
     <p class="thanks" id="thanks" role="status">We'll be in touch.</p>
   </div>
+
   <footer>© 2026 hippocraticOath LLC. All rights reserved.</footer>
 </div>
 <script>
 (function(){
-  // Paste your endpoint here. Works with either:
-  //   Google Sheet  — the /exec URL from Apps Script (see google-apps-script.gs)
-  //   Formspree     — https://formspree.io/f/YOUR_FORM_ID
+  /* =========================
+     ENDPOINT
+     Paste your endpoint here. Works with either:
+       Google Sheet — the /exec URL from Apps Script (see google-apps-script.gs)
+       Formspree    — https://formspree.io/f/YOUR_FORM_ID
+     ========================= */
   var FORM_ENDPOINT='https://script.google.com/macros/s/AKfycbwb5MpAacIiTcNw6Q0g-ch5ti4fkZvd-pAwSzKofnZgG6qVP__Jcq3MZx3XWw-zjiFu/exec';
 
+  /* =========================
+     READ THE DESIGN CONTROLS
+     Every number below comes from the CSS variables at the top of this file,
+     so timings and geometry are tuned in one place.
+     ========================= */
+  var root=document.documentElement;
+  function cssVar(name){ return getComputedStyle(root).getPropertyValue(name).trim(); }
+  function cssNum(name){ return parseFloat(cssVar(name)) || 0; }
+
+  var T={};
+  function readControls(){
+    T={
+      fieldClears:   cssNum('--t-field-clears'),
+      wordmark:      cssNum('--t-wordmark'),
+      sequenceStart: cssNum('--t-sequence-start'),
+      toHippo:       cssNum('--t-headline-to-hippo'),
+      toBlink:       cssNum('--t-hippo-to-blink'),
+      toSwap:        cssNum('--t-hippo-to-swap'),
+      toForm:        cssNum('--t-swap-to-form'),
+      idleReset:     cssNum('--t-idle-reset'),
+      loopRestart:   cssNum('--t-loop-restart'),
+      hippoHeight:   cssNum('--hippo-height'),   /* as a percentage of the stage */
+      hippoSlide:    cssNum('--hippo-slide'),
+      formNudgeUp:   cssNum('--form-nudge-up'),
+      tileStagger:   cssNum('--tile-stagger')
+    };
+  }
+  readControls();
+
+  /* =========================
+     ELEMENTS + STATE
+     ========================= */
   var page=document.getElementById('page'), stage=document.getElementById('stage'),
       hippo=document.getElementById('hippo'), svg=document.getElementById('hippoSvg'),
       trigger=document.getElementById('trigger'), form=document.getElementById('notify'),
       input=document.getElementById('notify-email'), mark=document.getElementById('mark'),
-      tiles=document.getElementById('tiles');
-  var mq=window.matchMedia('(max-width: 700px)'),
+      tiles=document.getElementById('tiles'), thanks=document.getElementById('thanks');
+
+  var mq=window.matchMedia('(max-width: 600px)'),
       reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var hover=false, clicked=false, auto=false, phase=0, engaged=false, introDone=false, chromeShown=false, sent=false;
-  var cycle=[], intro=[], idle=null;
+
+  var hover=false, clicked=false, auto=false, sent=false,
+      phase=0, engaged=false, introDone=false, chromeShown=false;
+  var cycle=[], idle=null;
 
   function isOpen(){ return hover||clicked||auto||sent; }
 
+  /* chromeShown / introDone latch on once played, so a replay only re-runs the
+     headline — the footer and hippo never blink out mid-loop. */
   function paint(){
-    page.className='page p'+phase+(phase>=3||chromeShown?' chrome':'')+(phase>=4||introDone?' hippo-shown':'')+(isOpen()?' open':'')+(sent?' sent':'');
+    page.className='page p'+phase
+      +(phase>=3||chromeShown?' chrome':'')
+      +(phase>=4||introDone?' hippo-shown':'')
+      +(isOpen()?' open':'')
+      +(sent?' sent':'');
     trigger.setAttribute('aria-expanded', String(isOpen()));
     layout();
   }
-
   function setPhase(p){ phase=p; if(p>=3) chromeShown=true; if(p>=4) introDone=true; paint(); }
 
-  // a field of hippos the size of the header mark, anchored so the header hippo is one of them
+  /* =========================
+     LAYOUT
+     The hippo slides down far enough to open a band above it, and the form is
+     centred in that band. Both are measured, never hard-coded, so any screen
+     height works.
+     ========================= */
+  function layout(){
+    var m=mq.matches;
+    /* mobile crops the back of the hippo and pins the nose to the right edge */
+    svg.setAttribute('viewBox', m ? '760 0 1240 754.974' : '0 0 2000 754.974');
+    svg.setAttribute('preserveAspectRatio', m ? 'xMaxYMid meet' : 'xMinYMid meet');
+
+    var rigH=T.hippoHeight, pad=m?10:16;
+    var stageH=stage.getBoundingClientRect().height,
+        formH=form.getBoundingClientRect().height;
+    var restTop=stageH*(100-rigH)/200, hippoH=stageH*rigH/100;
+    /* the slide only ever grows past its minimum, never shrinks below it */
+    var shift=hippoH
+      ? Math.min(.95, Math.max(T.hippoSlide, (formH+2*pad-restTop)/hippoH))
+      : T.hippoSlide;
+    if(stageH){
+      var top=((restTop+hippoH*shift)/2 - T.formNudgeUp).toFixed(1)+'px';
+      form.style.top=top;
+      if(!sent) thanks.style.top=top;
+    }
+    hippo.style.transform=isOpen() ? 'translateY('+(shift*100).toFixed(0)+'%)' : 'none';
+  }
+
+  /* =========================
+     INTRO FIELD
+     A lattice of hippos the size of the header mark, anchored so the header
+     hippo is one of them — it is the only one left standing.
+     ========================= */
   function buildTiles(){
     var r=mark.getBoundingClientRect();
     if(!r.width) return false;
     var w=r.width, h=r.height, vw=innerWidth, vh=innerHeight;
-    var px=w*1.18, py=h*1.98, c0=r.left+w/2, r0=r.top+h/2, out='';
+    var px=w*1.18, py=h*1.98;          /* pitch measured off the brand pattern */
+    var c0=r.left+w/2, r0=r.top+h/2, out='';
     for(var j=Math.floor(-r0/py)-1;j<=Math.ceil((vh-r0)/py)+1;j++){
       for(var i=Math.floor(-c0/px)-1;i<=Math.ceil((vw-c0)/px)+1;i++){
-        if(i===0&&j===0) continue;
+        if(i===0&&j===0) continue;      /* that one is the header logo */
         var cx=c0+i*px, cy=r0+j*py;
         if(cx<-w||cx>vw+w||cy<-h||cy>vh+h) continue;
         var d=Math.hypot((cx-c0)/vw,(cy-r0)/vh);
-        out+='<span style="left:'+(cx-w/2).toFixed(1)+'px;top:'+(cy-h/2).toFixed(1)+'px;width:'+w.toFixed(1)+'px;height:'+h.toFixed(1)+'px;transition-delay:'+(d*0.55).toFixed(2)+'s"></span>';
+        out+='<span style="left:'+(cx-w/2).toFixed(1)+'px;top:'+(cy-h/2).toFixed(1)
+            +'px;width:'+w.toFixed(1)+'px;height:'+h.toFixed(1)
+            +'px;transition-delay:'+(d*T.tileStagger).toFixed(2)+'s"></span>';
       }
     }
     tiles.innerHTML=out;
     return true;
   }
 
-  function layout(){
-    var m=mq.matches;
-    svg.setAttribute('viewBox', m ? '760 0 1240 754.974' : '0 0 2000 754.974');
-    svg.setAttribute('preserveAspectRatio', m ? 'xMaxYMid meet' : 'xMinYMid meet');
-    var rigH=m?82:60, pad=m?10:16;
-    var stageH=stage.getBoundingClientRect().height, formH=form.getBoundingClientRect().height;
-    var restTop=stageH*(100-rigH)/200, hippoH=stageH*rigH/100;
-    var shift=hippoH?Math.min(.95,Math.max(m?.42:.31,(formH+2*pad-restTop)/hippoH)):(m?.42:.31);
-    if(stageH) form.style.top=((restTop+hippoH*shift)/2-(m?8:14)).toFixed(1)+'px';
-    hippo.style.transform=isOpen()?'translateY('+(shift*100).toFixed(0)+'%)':'none';
-  }
-
-  // headline → hippo → "Coming Soon" → signup, replayed until someone interacts
+  /* =========================
+     SEQUENCE
+     headline -> hippo -> blink -> "Coming Soon" -> email form,
+     replayed on a loop until someone interacts.
+     ========================= */
   function runCycle(base){
     cycle=[
       setTimeout(function(){ setPhase(3); }, base),
-      setTimeout(function(){ setPhase(4); }, base+1700),
-      setTimeout(blink, base+3050),                                  // one blink, once the hippo is fully up
-      setTimeout(function(){ setPhase(5); }, base+3700),
-      setTimeout(function(){ auto=true; paint(); armIdle(); }, base+5400)
+      setTimeout(function(){ setPhase(4); }, base+T.toHippo),
+      setTimeout(blink,                     base+T.toBlink),
+      setTimeout(function(){ setPhase(5); }, base+T.toSwap),
+      setTimeout(function(){ auto=true; paint(); armIdle(); }, base+T.toForm)
     ];
   }
-  // restart the animation by removing and re-adding the class
+
+  /* re-arm the one-shot blink: SVG nodes have no offsetWidth, so reflow on body */
   function blink(){
     var eye=document.querySelector('.eye');
     if(!eye) return;
     eye.classList.remove('blink');
     if(eye.getAnimations) eye.getAnimations().forEach(function(a){ a.cancel(); });
-    void document.body.offsetWidth;   // SVG nodes have no offsetWidth of their own
+    void document.body.offsetWidth;
     eye.classList.add('blink');
   }
 
   function clearCycle(){ cycle.forEach(clearTimeout); clearTimeout(idle); }
+
   function armIdle(){
     clearTimeout(idle);
     if(hover||clicked) return;
     idle=setTimeout(function(){
       if(hover||clicked) return;
-      clearCycle(); auto=false; setPhase(2); runCycle(900);
-    }, 5000);
+      clearCycle(); auto=false; setPhase(2); runCycle(T.loopRestart);
+    }, T.idleReset);
   }
+
+  /* any real interest stops the loop for good, so it cannot yank the form away */
   function engage(){ if(engaged) return; engaged=true; clearCycle(); if(phase<5) setPhase(5); }
 
   function start(){
     if(reduce){ auto=true; setPhase(5); return; }
     if(!buildTiles()){ requestAnimationFrame(start); return; }
     paint();
-    intro=[
-      setTimeout(function(){ tiles.querySelectorAll('span').forEach(function(s){ s.style.opacity=0; }); }, 1100),
-      setTimeout(function(){ setPhase(2); }, 2200)
-    ];
-    runCycle(2750);
+    setTimeout(function(){
+      tiles.querySelectorAll('span').forEach(function(s){ s.style.opacity=0; });
+    }, T.fieldClears);
+    setTimeout(function(){ setPhase(2); }, T.wordmark);
+    runCycle(T.sequenceStart);
   }
 
+  /* =========================
+     INTERACTION
+     ========================= */
   stage.addEventListener('mouseenter', function(){ engage(); hover=true; paint(); });
   stage.addEventListener('mouseleave', function(){ hover=false; paint(); });
-  trigger.addEventListener('click', function(){ engage(); clicked=!clicked; paint(); });
-  trigger.addEventListener('focus', function(){ engage(); hover=true; paint(); });
-  input.addEventListener('focus', function(){ engage(); hover=true; paint(); });
-  input.addEventListener('blur', function(){ hover=false; paint(); });
+  trigger.addEventListener('click',    function(){ engage(); clicked=!clicked; paint(); });
+  trigger.addEventListener('focus',    function(){ engage(); hover=true; paint(); });
+  input.addEventListener('focus',      function(){ engage(); hover=true; paint(); });
+  input.addEventListener('blur',       function(){ hover=false; paint(); });
+
   form.addEventListener('submit', function(e){
     e.preventDefault();
     engage();
     var btn=document.getElementById('submit');
     btn.disabled=true; btn.textContent='Sending…';
-    // Apps Script does not send CORS headers, so that post goes out opaque
+    /* Apps Script sends no CORS headers, so that post goes out opaque */
     var toSheet=FORM_ENDPOINT.indexOf('script.google.com')>-1;
     var req=toSheet
       ? fetch(FORM_ENDPOINT,{method:'POST',mode:'no-cors',body:new FormData(form)})
       : fetch(FORM_ENDPOINT,{method:'POST',headers:{'Accept':'application/json'},body:new FormData(form)})
           .then(function(r){ if(!r.ok) throw new Error('bad response'); return r; });
-    req
-      .then(function(){
-        document.getElementById('thanks').style.top=form.style.top;
+    req.then(function(){
+        thanks.style.top=form.style.top;
         sent=true;
         form.reset();
         paint();
-        page.classList.add('sent');
       })
       .catch(function(){
         btn.disabled=false; btn.textContent='Try again';
       });
   });
 
-  if(window.ResizeObserver){ var ro=new ResizeObserver(layout); ro.observe(stage); ro.observe(form); }
+  /* =========================
+     KEEP IT MEASURED
+     ========================= */
+  if(window.ResizeObserver){
+    var ro=new ResizeObserver(layout);
+    ro.observe(stage); ro.observe(form);
+  }
   addEventListener('resize', layout);
-  if(mq.addEventListener) mq.addEventListener('change', layout);
+  addEventListener('orientationchange', function(){ readControls(); layout(); });
+  if(mq.addEventListener) mq.addEventListener('change', function(){ readControls(); layout(); });
   if(document.fonts&&document.fonts.ready) document.fonts.ready.then(layout);
+
   layout();
   start();
 })();

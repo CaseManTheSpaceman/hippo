@@ -163,6 +163,12 @@
     --button-font-size:14px;
     --form-nudge-up:8px;
     --headline-size:clamp(2rem, min(9vw, 10svh), 3.25rem);
+
+    /* Mobile-only opening timing */
+    --t-field-clears:1800;
+    --t-wordmark:2900;
+    --t-sequence-start:3450;
+    --dur-tile-fade:.9s;
   }
    /* Move only “Healthy skin starts here” down */
    #l1{
@@ -233,7 +239,7 @@ a:hover{color:var(--medium-purple);}
   align-items:center;
 }
 .masthead svg{display:block;width:var(--logo-width);height:auto;overflow:visible;}
-#word{opacity:0;transition:opacity .7s ease;}
+#word{opacity:0;transition:opacity 1.2s ease;}
 .page.p2 #word,.page.p3 #word,.page.p4 #word,.page.p5 #word{opacity:1;}
 
 

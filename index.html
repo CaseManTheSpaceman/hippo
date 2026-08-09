@@ -3,17 +3,18 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta property="og:title" content="Skin by HippO">
+<meta property="og:title" content="Skin by hippO">
 <meta property="og:description" content="Healthy skin starts here.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://skinbyhippo.com/">
 <meta property="og:image" content="https://skinbyhippo.com/social-preview.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Skin by HippO">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:alt" content="Skin by hippO">
 <meta name="twitter:card" content="summary_large_image">
-<title>Skin by Hippo - Coming soon</title>
-<meta name="description" content="Healthy skin starts here. Skin by HippO is coming soon.">
+<title>Skin by hippO - Coming soon</title>
+<meta name="description" content="Healthy skin starts here. Skin by hippO is coming soon.">
 <meta name="theme-color" content="#FEFCF6">
 <link rel="icon" href="/favicon.ico?v=2" sizes="any">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=2">
@@ -119,7 +120,7 @@
   --t-wordmark:2200;          /* logo wordmark fades in */
   --t-sequence-start:2750;    /* headline + footer fade in — beat 1 */
   --t-headline-to-hippo:1700; /* wait from headline until the hippo reveals */
-  --t-hippo-to-blink:3050;    /* wait from headline until the hippo blinks */
+  --t-hippo-to-blink:2700;    /* wait from headline until the hippo blinks */
   --t-hippo-to-swap:3700;     /* wait from headline until "Coming Soon" appears */
   --t-swap-to-form:5400;      /* wait from headline until the email form appears */
   --t-idle-reset:5000;        /* idle time before the sequence replays */
@@ -138,6 +139,13 @@
   /* ---- EASING ---- */
   --ease-soft:cubic-bezier(.4,0,.2,1);        /* hovers and small state changes */
   --ease-slide:cubic-bezier(.2,.75,.25,1);    /* the hippo's slide */
+
+  /* ---- OPENING FIELD ---- */
+  --purple-hippo-count:5;
+  /* How many of the opening field's hippos are brand purple instead of pale.
+     Must be an odd number — an even value drops to the next lower odd one, and
+     the count shrinks if the grid has fewer rows or columns than that. The
+     centre logo hippo is not counted. Mobile overrides this below. */
 
   /* ---- SHAPE ---- */
   --pill:999px;
@@ -171,6 +179,8 @@
     --button-padding-x:1rem;
     --button-font-size:14px;
     --form-nudge-up:8px;
+    --purple-hippo-count:3;
+    /* Fewer accents on a phone, where the grid is only a few columns wide. */
     --headline-size:clamp(2rem, min(9vw, 10svh), 3.25rem);
 
     /* Mobile-only opening timing */
@@ -425,6 +435,7 @@ footer{
 .eye.blink{animation:eye-close var(--dur-blink) ease-in-out;}
 
 #tiles{position:fixed;inset:0;z-index:5;pointer-events:none;}
+#tiles span.purple{background-image:url("data:image/svg+xml;utf8,%3C%3Fxml%20version%3D%221.0%22%3F%3E%3Csvg%20id%3D%22Layer_1%22%20data-name%3D%22Layer%201%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%222000%22%20height%3D%22754.974%22%20viewBox%3D%220%200%202000%20754.974%22%3E%3Cg%3E%3Cpath%20d%3D%22M1269.676%2C53.179c-58.799-10.65-80.141%2C98.124-2.865%2C98.124%2C41.328%2C0%2C65.279-86.818%2C2.865-98.124Z%22%20fill%3D%22%23b9bcef%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M689.818%2C610.334c310.19%2C0%2C291.929%2C54.422%2C312.614%2C106.208%2C4.456%2C11.155%2C18.747%2C32.718%2C47.03%2C32.718h121.659c18.251%2C0%2C30.919-18.231%2C24.471-35.305-43.329-114.735-23.839-231.858%2C72.865-249.69%2C98.345-18.135%2C189.38%2C30.096%2C391.976%2C30.096%2C268.518%2C0%2C281.11-134.814%2C269.492-212.844-11.618-78.03-65.255-151.022-293.28-151.022-119.428%2C0-275.852%2C20.289-370.997%2C20.289-154.258%2C0-644.366-82.645-887.077-82.645S16.752%2C198.304%2C16.752%2C363.963c0%2C185.56%2C146.987%2C253.688%2C173.717%2C368%2C2.345%2C10.028%2C6.932%2C17.297%2C20.916%2C17.297h115.135c11.532%2C0%2C17.029-3.934%2C14.017-22.443-6.636-40.784%2C20.584-116.483%2C349.281-116.483ZM1433.014%2C284.83c-26.146%2C3.301-48.137-18.678-44.848-44.822%2C2.241-17.813%2C16.623-32.199%2C34.435-34.448%2C26.146-3.301%2C48.137%2C18.678%2C44.848%2C44.822-2.241%2C17.813-16.623%2C32.199-34.435%2C34.448Z%22%20fill%3D%22%23b9bcef%22%3E%3C%2Fpath%3E%3C%2Fg%3E%3Cg%3E%3Cpath%20d%3D%22M1448.103%2C184.279c-22.03%2C2.777-40.034%2C20.781-42.797%2C42.811-1.948%2C15.441%2C3.201%2C30.566%2C14.132%2C41.488%2C9.407%2C9.393%2C21.918%2C14.519%2C35.067%2C14.519%2C2.125%2C0%2C4.273-.13%2C6.421-.41%2C22.03-2.777%2C40.034-20.781%2C42.801-42.811%2C1.943-15.441-3.206-30.566-14.137-41.488-10.922-10.922-26.065-16.066-41.488-14.109ZM1484.586%2C237.461c-1.687%2C13.419-12.66%2C24.387-26.069%2C26.083h-.005c-9.477%2C1.193-18.745-1.948-25.436-8.62-6.672-6.672-9.822-15.945-8.634-25.422%2C1.691-13.419%2C12.66-24.387%2C26.079-26.083%2C1.328-.168%2C2.642-.252%2C3.956-.252%2C8.07%2C0%2C15.73%2C3.131%2C21.475%2C8.872%2C6.677%2C6.672%2C9.827%2C15.945%2C8.634%2C25.422Z%22%20fill%3D%22%23102845%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M1996.518%2C266.089c-13.195-83.954-76.191-184.038-301.4-184.038-64.78%2C0-144.293%2C4.641-221.178%2C9.132-50.709%2C2.963-99.302%2C5.796-139.666%2C7.026%2C7.888-10.493%2C12.967-23.81%2C14.155-37.014%2C2.791-31.097-15.162-54.767-45.751-60.312-19.919-3.597-38.38%2C3.895-50.839%2C20.529-14.505%2C19.355-17.538%2C47.051-7.381%2C67.366%2C1.528%2C3.057%2C3.7%2C5.517%2C5.712%2C8.117-76.284-5.358-191.577-21.014-312.326-37.415C746.165%2C33.434%2C528.915%2C3.922%2C390.227%2C3.922%2C120.661%2C3.922%2C0%2C165.072%2C0%2C324.779c0%2C132.179%2C65.521%2C223.615%2C118.172%2C297.085%2C29.01%2C40.481%2C54.073%2C75.455%2C61.271%2C107.884%2C1.389%2C6.234%2C5.615%2C25.226%2C30.799%2C25.226h157.936c9.775%2C0%2C18.13-4.054%2C22.901-11.127%2C3.895-5.768%2C7.124-16.178.377-32.942-4.687-11.621-3.937-21.732%2C2.264-30.92%2C14.687-21.75%2C74.108-58.234%2C307.079-58.234%2C259.553%2C0%2C311.646%2C21.881%2C336.369%2C87.625%2C8.909%2C23.679%2C22.235%2C45.597%2C59.072%2C45.597h123.465c11.956%2C0%2C23.143-5.871%2C29.937-15.702%2C6.775-9.803%2C8.308-22.309%2C4.096-33.436-32.686-86.572-36.381-174.486-9.412-223.979%2C12.804-23.511%2C32.178-38.217%2C57.577-43.687%2C45.849-9.869%2C95.318%2C3.047%2C157.931%2C19.393%2C66.975%2C17.482%2C150.327%2C39.26%2C258.505%2C39.26%2C117.963%2C0%2C200.071-26.083%2C244.042-77.505%2C32.63-38.151%2C44.111-89.703%2C34.135-153.23ZM1267.275%2C32.978c4.058-5.414%2C12.441-13.68%2C25.753-13.68%2C1.966%2C0%2C4.03.177%2C6.206.578%2C29.778%2C5.386%2C30.883%2C29.485%2C29.969%2C39.596-1.705%2C18.992-14.579%2C39.307-31.041%2C39.372h-.168c-17.622-.028-30.165-6.486-36.278-18.703-6.915-13.801-4.571-33.641%2C5.559-47.163ZM1947.719%2C406.776c-40.141%2C46.948-117.32%2C70.749-229.379%2C70.749-105.704%2C0-187.724-21.415-253.631-38.636-65.083-16.998-116.49-30.435-166.868-19.57-31.139%2C6.7-54.841%2C24.639-70.46%2C53.304-35.85%2C65.8-19.211%2C167.134%2C8.308%2C240.035%2C2.004%2C5.284%2C1.3%2C10.987-1.915%2C15.646-3.243%2C4.687-8.364%2C7.371-14.067%2C7.371h-123.465c-21.624%2C0-31.591-8.042-41.012-33.101-28.711-76.34-81.344-100.122-354.429-100.122-184.476%2C0-293.166%2C22.449-323.066%2C66.723-9.794%2C14.509-11.234%2C31.423-4.18%2C48.943%2C2.721%2C6.747%2C3.29%2C12.329%2C1.533%2C14.929-1.649%2C2.442-5.708%2C2.628-6.91%2C2.628h-157.936c-8.247%2C0-10.297-2.647-11.961-10.12-8.056-36.269-34.177-72.724-64.431-114.929-51.035-71.224-114.552-159.865-114.552-285.846C19.299%2C116.465%2C205.597%2C23.221%2C390.227%2C23.221c137.383%2C0%2C353.949%2C29.42%2C545.022%2C55.373%2C156.226%2C21.228%2C291.158%2C39.559%2C361.749%2C39.559.322%2C0%2C.685-.009%2C1.006-.009.028%2C0%2C.056.009.084.009.033%2C0%2C.056-.009.089-.009%2C46.054-.065%2C109.594-3.765%2C176.886-7.697%2C76.62-4.473%2C155.83-9.095%2C220.055-9.095%2C169.859%2C0%2C264.851%2C56.435%2C282.338%2C167.73%2C9.063%2C57.693-.941%2C104.026-29.736%2C137.695Z%22%20fill%3D%22%23102845%22%3E%3C%2Fpath%3E%3C%2Fg%3E%3C%2Fsvg%3E");}
 #tiles span{
   position:absolute;
   display:block;
@@ -468,7 +479,7 @@ footer{
   </div>
 
   <h1><span id="l1">Healthy skin
-starts here.</span><span id="l2">Coming Soon.</span></h1>
+starts here.</span><span id="l2">Coming soon.</span></h1>
 
   <div class="stage" id="stage">
     <button type="button" class="trigger" id="trigger" aria-label="Show email notification form" aria-expanded="false">
@@ -513,6 +524,9 @@ starts here.</span><span id="l2">Coming Soon.</span></h1>
      Every number below comes from the CSS variables at the top of this file,
      so timings and geometry are tuned in one place.
      ========================= */
+  /* one seed per page load — reused for every rebuild of the field */
+  var PURPLE_SEED=(Date.now()^Math.floor(Math.random()*0x7FFFFFFF))|0;
+
   var root=document.documentElement;
   function cssVar(name){ return getComputedStyle(root).getPropertyValue(name).trim(); }
   function cssNum(name){ return parseFloat(cssVar(name)) || 0; }
@@ -531,6 +545,7 @@ starts here.</span><span id="l2">Coming Soon.</span></h1>
       loopRestart:   cssNum('--t-loop-restart'),
       hippoHeight:   cssNum('--hippo-height'),   /* as a percentage of the stage */
       hippoSlide:    cssNum('--hippo-slide'),
+      purpleCount:   cssNum('--purple-hippo-count'),
       formNudgeUp:   cssNum('--form-nudge-up'),
       tileStagger:   cssNum('--tile-stagger')
     };
@@ -601,22 +616,127 @@ starts here.</span><span id="l2">Coming Soon.</span></h1>
      A lattice of hippos the size of the header mark, anchored so the header
      hippo is one of them — it is the only one left standing.
      ========================= */
+  /* a small deterministic generator, so the arrangement is stable across
+     reloads, resizes and orientation changes */
+  function seeded(seed){
+    return function(){
+      seed|=0; seed=seed+0x6D2B79F5|0;
+      var t=Math.imul(seed^seed>>>15,1|seed);
+      t=t+Math.imul(t^t>>>7,61|t)^t;
+      return ((t^t>>>14)>>>0)/4294967296;
+    };
+  }
+
+  /* Pick which cells of the field are brand purple.
+     One per row, one per column, never touching the centre logo, and spread
+     as far apart as the grid allows. */
+  function choosePurple(cells){
+    var wanted=Math.floor(T.purpleCount);
+    if(!(wanted>0)) return {};
+
+    /* the field is built with a ring of tiles beyond the edges so it looks
+       continuous — those can never be chosen, or the purple ones land off screen */
+    var inside=cells.filter(function(c){ return c.onScreen; });
+    if(!inside.length) return {};
+
+    var rows=[], cols=[], k;
+    for(k=0;k<inside.length;k++){
+      if(rows.indexOf(inside[k].j)<0) rows.push(inside[k].j);
+      if(cols.indexOf(inside[k].i)<0) cols.push(inside[k].i);
+    }
+    rows.sort(function(a,b){return a-b;});
+    cols.sort(function(a,b){return a-b;});
+
+    /* Drop the rows and columns that touch the centre logo up front, so every
+       pairing below is automatically clear of it. Keep them only if removing
+       them would leave too little grid to work with. */
+    function away(list){ return list.filter(function(v){ return Math.abs(v)>1; }); }
+    var rowsFar=away(rows), colsFar=away(cols);
+    if(rowsFar.length>=1 && colsFar.length>=1){ rows=rowsFar; cols=colsFar; }
+
+    var n=Math.min(wanted, rows.length, cols.length);
+    if(n%2===0) n-=1;              /* always an odd number */
+    if(n<1) return {};
+
+    /* evenly spaced rows and columns, so the set spans the whole field */
+    function spread(list,count){
+      if(count===1) return [list[(list.length-1)>>1]];
+      var out=[];
+      for(var q=0;q<count;q++) out.push(list[Math.round(q*(list.length-1)/(count-1))]);
+      return out;
+    }
+    var pickRows=spread(rows,n), pickCols=spread(cols,n);
+
+    var free={};
+    for(k=0;k<inside.length;k++) free[inside[k].i+','+inside[k].j]=true;
+
+    /* try a number of seeded pairings and keep the one whose hippos sit
+       furthest apart — random-looking, never a diagonal. The base seed is drawn
+       once per page load, so the arrangement differs each visit but stays put
+       through resizes and orientation changes. */
+    var best=null, bestScore=-1;
+    for(var attempt=0;attempt<240;attempt++){
+      var rand=seeded(PURPLE_SEED+attempt);
+      var order=pickCols.slice();
+      for(var s=order.length-1;s>0;s--){
+        var t2=Math.floor(rand()*(s+1)), tmp=order[s]; order[s]=order[t2]; order[t2]=tmp;
+      }
+      var pts=[];
+      for(k=0;k<n;k++){
+        var ci=order[k], rj=pickRows[k];
+        /* never adjacent to (or on) the centre logo, and it must be a real cell */
+        if((Math.abs(ci)<=1&&Math.abs(rj)<=1) || !free[ci+','+rj]) continue;
+        pts.push([ci,rj]);
+      }
+      if(!pts.length) continue;
+      var minD=Infinity, diagonal=0;
+      for(var p=0;p<pts.length;p++){
+        for(var q2=p+1;q2<pts.length;q2++){
+          minD=Math.min(minD, Math.abs(pts[p][0]-pts[q2][0])+Math.abs(pts[p][1]-pts[q2][1]));
+        }
+        if(p>0){
+          var dx=pts[p][0]-pts[p-1][0], dy=pts[p][1]-pts[p-1][1];
+          if(dx!==0 && Math.abs(dx)===Math.abs(dy)) diagonal++;
+        }
+      }
+      if(pts.length===1) minD=99;
+      var score=pts.length*10+minD-diagonal*2;
+      if(score>bestScore){ bestScore=score; best=pts; }
+    }
+    if(!best) return {};
+    var chosen={};
+    for(k=0;k<best.length;k++) chosen[best[k][0]+','+best[k][1]]=true;
+    return chosen;
+  }
+
   function buildTiles(){
     var r=mark.getBoundingClientRect();
     if(!r.width) return false;
     var w=r.width, h=r.height, vw=innerWidth, vh=innerHeight;
     var px=w*1.18, py=h*1.98;          /* pitch measured off the brand pattern */
-    var c0=r.left+w/2, r0=r.top+h/2, out='';
+    var c0=r.left+w/2, r0=r.top+h/2, out='', cells=[];
+
     for(var j=Math.floor(-r0/py)-1;j<=Math.ceil((vh-r0)/py)+1;j++){
       for(var i=Math.floor(-c0/px)-1;i<=Math.ceil((vw-c0)/px)+1;i++){
         if(i===0&&j===0) continue;      /* that one is the header logo */
         var cx=c0+i*px, cy=r0+j*py;
         if(cx<-w||cx>vw+w||cy<-h||cy>vh+h) continue;
-        var d=Math.hypot((cx-c0)/vw,(cy-r0)/vh);
-        out+='<span style="left:'+(cx-w/2).toFixed(1)+'px;top:'+(cy-h/2).toFixed(1)
-            +'px;width:'+w.toFixed(1)+'px;height:'+h.toFixed(1)
-            +'px;transition-delay:'+(d*T.tileStagger).toFixed(2)+'s"></span>';
+        cells.push({
+          i:i, j:j, cx:cx, cy:cy,
+          onScreen: (cx-w/2>=0 && cx+w/2<=vw && cy-h/2>=0 && cy+h/2<=vh)
+        });
       }
+    }
+
+    var purple=choosePurple(cells);
+
+    for(var k=0;k<cells.length;k++){
+      var c=cells[k];
+      var d=Math.hypot((c.cx-c0)/vw,(c.cy-r0)/vh);
+      out+='<span class="'+(purple[c.i+','+c.j]?'purple':'')+'" style="left:'+(c.cx-w/2).toFixed(1)
+          +'px;top:'+(c.cy-h/2).toFixed(1)
+          +'px;width:'+w.toFixed(1)+'px;height:'+h.toFixed(1)
+          +'px;transition-delay:'+(d*T.tileStagger).toFixed(2)+'s"></span>';
     }
     tiles.innerHTML=out;
     return true;
